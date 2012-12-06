@@ -1,0 +1,40 @@
+project crc
+  : requirements
+    <link>static
+    <cxxflags>-std=c++11
+    <debug-symbols>on
+  : default-build
+  : build-dir bin
+  ;
+
+import testing ;
+
+alias crc
+  : # sources
+    /site-config//boost
+  : # requirements
+    <include>include
+  : # default-build
+  : # usage-requirements
+    <include>include
+  ;
+
+unit-test crc_test
+  : # sources
+    test/crc_test.cpp
+    crc
+    /site-config//boost
+  : # requirements
+    <toolset>gcc-pc
+    <target-os>windows
+  ;
+  
+unit-test initialized_array_test
+  : # sources
+    test/initialized_array_test.cpp
+    crc
+    /site-config//boost
+  : # requirements
+    <toolset>gcc-pc
+    <target-os>windows
+  ;
