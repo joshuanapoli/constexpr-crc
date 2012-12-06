@@ -9,13 +9,16 @@ bool init_unit_test()
   return true;
 }
 
-template<std::size_t N>
 struct times_two
 {
-  constexpr operator std::uint32_t ()
+  constexpr times_two( std::size_t n ) : n_( n ) {}
+
+  constexpr std::uint32_t operator ()()
   {
-    return N*2;
+    return n_*2;
   }
+
+  std::size_t n_;
 };
 
 BOOST_AUTO_TEST_CASE( initialized_array_test )
