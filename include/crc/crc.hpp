@@ -1,63 +1,34 @@
 #pragma once
-#include <array>
+#include <crc/initialized_array.hpp>
+#include <crc/crc_table_item.hpp>
+#include <boost/integer.hpp>
 
-// Table-based 32-bit CRC calculator.
-template<uint32_t Polynomial>
-class Crc
+namespace crc
 {
-public:
-  typedef uint32_t remainder_type;
-  typedef std::array<remainder_type,256> table_type;
+  // Table-based CRC calculator.
+  template<std::size_t Bits, typename boost::uint_t<Bits>::fast Polynomial, typename boost::uint_t<Bits>::fast InitialRemainder=0>
+  class crc
+  {
+  public:
+    typedef typename boost::uint_t<Bits>::fast remainder_type;
   
-  constexpr Crc()
-    : table_{{create_table}}
-  {}
+    crc() : table_( crc_table_item<Bits,Polynomial>() ) {}
 
-  template<class Iterator>
-  constexpr remainder_type process_bytes(Iterator first, Iterator last, remainder_type accumulator = 0) const
-  {
-    return first < last 
-      ? process_bytes(first+1, last, (accumulator << 8) ^ table_[(accumulator >> 24) ^ *first])
-      : accumulator;
-  }
-
-private:
-  struct table_item
-  {
-    constexpr bit_width()
+    template<typename T>
+    constexpr remainder_type operator()(const T & object) const
     {
-      return 32;
+      return (*this)(reinterpret_cast<const uint8_t *>(&object), reinterpret_cast<const uint8_t *>(&object + 1));
     }
 
-    constexpr table_item(uint8_t n)
-      : value(calculate_remainder(n << (bit_width()-8)))
+    template<typename Iterator>
+    constexpr remainder_type operator()(Iterator first, Iterator last, remainder_type accumulator = InitialRemainder) const
     {
+      return first < last 
+        ? (*this)(first+1, last, (accumulator << 8) ^ table_[((accumulator >> (Bits-8)) ^ *first)&0xff])
+        : accumulator;
     }
 
-    constexpr calculate_remainder(remainder_type remainder, int bit = 0)
-    {
-      return bit < 8
-        ? calculate_remainder(mod_shift(remainder), bit+1)
-        : remainder
-        ;
-    }
-
-    constexpr mod_shift(uint32_t x)
-    {
-      return x & (1 << (bit_width()-1)
-        ? (x << 1) ^ Polynomial
-        : x << 1
-        ;
-    }
-    
-    remainder_type value;
+  private:
+    initialized_array<remainder_type, 256> table_;
   };
-
-  template<typename i = sequence<0,256>()>
-  static constexpr table_type generate_table()
-  {
-    return table_type{{ table_item(i)... }}
-  }
-  
-  remainder_type table_[256];
-};
+}

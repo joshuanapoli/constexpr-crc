@@ -1,17 +1,31 @@
 #pragma once
 #include <array>
+#include <crc/seq.hpp>
 
 namespace crc
 {
-  template<typename T, std::size_t N, typename F, T... Values>
-  struct initialized_array : initialized_array<T, N-1, F, F(N-1)(), Values...>
+  namespace detail
   {
-  };
+    template<typename T, typename Sequence>
+    struct initialized_array_impl;
+  
+    template<typename T, std::size_t... Index>
+    struct initialized_array_impl<T, seq<Index...>> : std::array<T, sizeof...(Index)>
+    {
+    public:
+      template<typename F>
+      constexpr initialized_array_impl( F f )
+        : std::array<T, sizeof...(Index)>{{f(Index)...}}
+      {}
+    };
+  }
 
-  template<typename T, typename F, T... Values>
-  struct initialized_array<T, 0, F, Values...> : std::array<T, sizeof...(Values)>
+  template<typename T, std::size_t N>
+  struct initialized_array : detail::initialized_array_impl<T, typename gen_seq<N>::type>
   {
-  public:
-    constexpr initialized_array() : std::array<T, sizeof...(Values)>{{Values...}} {}
+    template<typename F>
+    constexpr initialized_array( F f )
+      : detail::initialized_array_impl<T, typename gen_seq<N>::type>( f )
+    {}
   };
 }

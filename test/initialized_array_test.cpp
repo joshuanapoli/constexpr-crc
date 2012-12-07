@@ -11,21 +11,14 @@ bool init_unit_test()
 
 struct times_two
 {
-  constexpr times_two( std::size_t n ) : n_( n ) {}
-
-  constexpr std::uint32_t operator ()()
-  {
-    return n_*2;
-  }
-
-  std::size_t n_;
+  constexpr std::size_t operator()( std::size_t x ) { return x*2; }
 };
 
 BOOST_AUTO_TEST_CASE( initialized_array_test )
 {
-  constexpr crc::initialized_array<std::uint32_t, 5, times_two> actual_array;
+  constexpr crc::initialized_array<std::size_t, 5> actual_array{ times_two() };
 
-  std::array<std::uint32_t,5> expected_array{{0,2,4,6,8}};
+  std::array<std::size_t,5> expected_array{{0,2,4,6,8}};
 
   BOOST_CHECK_EQUAL_COLLECTIONS
     ( actual_array.begin(), actual_array.end()
