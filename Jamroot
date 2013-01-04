@@ -9,9 +9,15 @@ project crc
 
 import testing ;
 
+alias table
+  : # sources
+    table//table
+  ;
+
 alias crc
   : # sources
     /site-config//boost
+    table
   : # requirements
     <include>include
   : # default-build
@@ -22,16 +28,6 @@ alias crc
 unit-test crc_test
   : # sources
     test/crc_test.cpp
-    crc
-    /site-config//boost
-  : # requirements
-    <toolset>gcc-pc
-    <target-os>windows
-  ;
-  
-unit-test initialized_array_test
-  : # sources
-    test/initialized_array_test.cpp
     crc
     /site-config//boost
   : # requirements

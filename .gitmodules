@@ -1,0 +1,3 @@
+[submodule "table"]
+	path = table
+	url = git@github.com:joshuanapoli/table.git
