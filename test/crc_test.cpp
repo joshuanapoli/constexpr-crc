@@ -1,6 +1,5 @@
-#define BOOST_TEST_ALTERNATIVE_INIT_API
+#define BOOST_TEST_MODULE table_test
 #include <array>
-#include <boost/test/included/unit_test.hpp>
 #include <boost/test/unit_test.hpp>
 #include <crc.hpp>
 #include <boost/crc.hpp>

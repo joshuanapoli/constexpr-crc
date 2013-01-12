@@ -17,7 +17,7 @@ public:
     return this->process_bytes( &cstring[0], size );
   }
 
-  constexpr remainder_type process_bytes( const char * first, std::size_t size, remainder_type accumulator = InitialRemainder ) const
+  constexpr remainder_type process_bytes( const char* first, std::size_t size, remainder_type accumulator = InitialRemainder ) const
   {
     return 0 < size
       ? this->process_bytes( first+1, size-1, (accumulator << 8) ^ table_[ ((accumulator >> (Bits-8)) ^ *first) &0xff ] )

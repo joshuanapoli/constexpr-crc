@@ -16,7 +16,7 @@ alias table
 
 alias crc
   : # sources
-    /site-config//boost
+    /boost//headers
     table
   : # requirements
     <include>include
@@ -29,8 +29,10 @@ unit-test crc_test
   : # sources
     test/crc_test.cpp
     crc
-    /site-config//boost
+    /boost/test//boost_unit_test_framework
   : # requirements
     <toolset>gcc-pc
     <target-os>windows
   ;
+
+build-project table ;
