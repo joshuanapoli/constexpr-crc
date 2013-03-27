@@ -1,0 +1,49 @@
+# Boost Build 2 configuration for testing the constant expression table library
+#
+# Copyright (c) 2013
+# Joshua Napoli <jnapoli@alum.mit.edu>
+#
+# Distributed under the Boost Software License, Version 1.0.
+#    (See accompanying file LICENSE_1_0.txt or copy at
+#          http://www.boost.org/LICENSE_1_0.txt)
+
+project table
+  : requirements
+    <link>static
+    <cxxflags>-std=c++11
+    <debug-symbols>on
+  : default-build
+  : build-dir bin
+  ;
+
+import testing ;
+
+alias table
+  : # sources
+  : # requirements
+  : # default-build
+  : # usage-requirements
+    <include>include
+  ;
+
+unit-test table_test
+  : # sources
+    test/table_test.cpp
+    table
+    /boost/test//boost_unit_test_framework
+  ;
+
+unit-test array_cat_test
+  : # sources
+    test/array_cat_test.cpp
+    table
+    /boost/test//boost_unit_test_framework
+  ;
+
+unit-test array_cat_element_test
+  : # sources
+    test/array_cat_element_test.cpp
+    table
+    /boost/test//boost_unit_test_framework
+  ;
+  
