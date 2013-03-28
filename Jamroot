@@ -2,22 +2,17 @@ project crc
   : requirements
     <link>static
     <cxxflags>-std=c++11
-    <debug-symbols>on
-  : default-build
-  : build-dir bin
   ;
 
 import testing ;
 
-alias table
-  : # sources
-    table//table
-  ;
+use-project /table : vendor/table ;
+use-project /boost : ../boost ;
 
 alias crc
   : # sources
     /boost//headers
-    table
+    /table//table
   : # requirements
     <include>include
   : # default-build
@@ -35,4 +30,4 @@ unit-test crc_test
     <target-os>windows
   ;
 
-build-project table ;
+build-project vendor/table ;

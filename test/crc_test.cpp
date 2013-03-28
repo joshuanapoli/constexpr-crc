@@ -53,18 +53,3 @@ BOOST_AUTO_TEST_CASE( constexpr_8_bit_crc_has_same_result_as_boost_crc )
     , boost_crc.checksum()
     );
 }
-
-BOOST_AUTO_TEST_CASE( constexpr_xmodem_t_has_same_result_as_boost_crc )
-{
-  char message[] = "hello world";
-
-  boost::crc_xmodem_t boost_crc;
-  boost_crc.process_bytes( message, sizeof( message ) );
-
-  crc_xmodem_t constexpr_crc;
-
-  BOOST_CHECK_EQUAL
-    ( constexpr_crc.process_cstring( message )
-    , boost_crc.checksum()
-    );
-}

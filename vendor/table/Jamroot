@@ -12,8 +12,6 @@ project table
     <link>static
     <cxxflags>-std=c++11
     <debug-symbols>on
-  : default-build
-  : build-dir bin
   ;
 
 import testing ;
