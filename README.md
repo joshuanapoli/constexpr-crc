@@ -27,12 +27,6 @@ static_assert
 
 The constexpr-crc library is a header only library, so there is no object file
 to build or link. The library depends on Boost to calculate an integer type. A
-Boost Build Jamfile is included that builds the unit test. The source code
-includes the table library as a git submodule. After cloning constexpr-crc,
-clone the submodule. To get the source code and run the test:
+Boost Build Jamfile is included that builds the unit test.
 
-```
-git submodule init
-git submodule update
-b2
-```
+The library requires compiler support for aggregate initialization. Version 4.7 or higher of GCC will work.
